@@ -47,7 +47,8 @@ class ListFragment : Fragment() {
             newsList.visibility = View.GONE
             loadingError.visibility = View.GONE
             loadingView.visibility = View.VISIBLE
-            viewModel.refresh()
+            //viewModel.refresh()
+            viewModel.fetchFromDatabase()
             refreshLayout.isRefreshing = false
         }
 
