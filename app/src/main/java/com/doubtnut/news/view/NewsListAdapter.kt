@@ -3,6 +3,7 @@ package com.doubtnut.news.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtnut.news.R
 import com.doubtnut.news.model.data.Article
@@ -33,6 +34,12 @@ class NewsListAdapter(val articlesList : ArrayList<Article>) : RecyclerView.Adap
         holder.view.newsTitle.text = articlesList[position].title
         holder.view.newsPublishedAt.text = articlesList[position].publishedAt
         holder.view.newsImage.loadImage(articlesList[position].urlToImage, getProgressDrawable(holder.view.newsImage.context))
+
+        holder.view.setOnClickListener {
+            val action = ListFragmentDirections.actionListDetails()
+            action.newsUuid = articlesList[position].uuid
+            Navigation.findNavController(it).navigate(action)
+        }
     }
 
 }
