@@ -11,9 +11,8 @@ data class Article(
     val content: String?,
     val description: String?,
     val publishedAt: String?,
-//    @Embedded(prefix = "source_")
-//    @Ignore
-//    val source: Source,
+    @Embedded(prefix = "source_")
+    val source: Source,
     val title: String?,
     val url: String?,
     val urlToImage: String?

@@ -1,6 +1,6 @@
 package com.doubtnut.news.model.data
 
 data class Source(
-    val id: Any,
+    val id: String,
     val name: String
 )
