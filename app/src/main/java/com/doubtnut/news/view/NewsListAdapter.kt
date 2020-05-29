@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtnut.news.R
 import com.doubtnut.news.model.data.Article
+import com.doubtnut.news.util.getProgressDrawable
+import com.doubtnut.news.util.loadImage
 import kotlinx.android.synthetic.main.item_news.view.*
 
 class NewsListAdapter(val articlesList : ArrayList<Article>) : RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
@@ -30,6 +32,7 @@ class NewsListAdapter(val articlesList : ArrayList<Article>) : RecyclerView.Adap
         holder.view.newsAuthor.text = articlesList[position].author
         holder.view.newsTitle.text = articlesList[position].title
         holder.view.newsPublishedAt.text = articlesList[position].publishedAt
+        holder.view.newsImage.loadImage(articlesList[position].urlToImage, getProgressDrawable(holder.view.newsImage.context))
     }
 
 }
