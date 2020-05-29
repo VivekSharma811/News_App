@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/app_navigation"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.doubtnut.news.view.ListFragment"
+        android:label="ListFragment" >
+        <action
+            android:id="@+id/actionListDetails"
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.doubtnut.news.view.DetailsFragment"
+        android:label="DetailsFragment" >
+        <action
+            android:id="@+id/actionDetailsList"
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <argument
+            android:name="newsUuid"
+            android:defaultValue="0"
+            app:argType="integer"/>
+    </fragment>
+</navigation>
