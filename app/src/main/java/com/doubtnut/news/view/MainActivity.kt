@@ -1,7 +1,8 @@
-package com.doubtnut.news
+package com.doubtnut.news.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.doubtnut.news.R
 
 class MainActivity : AppCompatActivity() {
 
