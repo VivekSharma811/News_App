@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.doubtnut.news.view.ListFragment"
-        android:label="ListFragment" >
+        android:label="Latest News" >
         <action
             android:id="@+id/actionListDetails"
             app:destination="@id/detailsFragment"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.doubtnut.news.view.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="Detailed View" >
         <action
             android:id="@+id/actionDetailsList"
             app:destination="@id/listFragment"
@@ -31,4 +31,12 @@
             android:defaultValue="0"
             app:argType="integer"/>
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.doubtnut.news.view.SettingsFragment"
+        android:label="SettingsFragment"
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_close_exit"
+        app:popEnterAnim="@anim/fragment_open_enter"
+        app:popExitAnim="@anim/fragment_close_exit" />
 </navigation>

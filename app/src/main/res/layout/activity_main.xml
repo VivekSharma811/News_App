@@ -23,4 +23,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/app_navigation" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment"
+        app:menu="@menu/bottom_nav"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
