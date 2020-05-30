@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="article"
+            type="com.doubtnut.news.model.data.Article" />
+        <variable
+            name="listener"
+            type="com.doubtnut.news.util.NewsClickListener" />
+    </data>
+
     <androidx.cardview.widget.CardView
         style="@style/NewsArticle.View"
         android:layout_width="match_parent"
@@ -18,13 +27,22 @@
             <RelativeLayout
                 android:id="@+id/newsImageView"
                 android:layout_width="match_parent"
+                android:onClick="@{listener::onNewsClicked}"
                 android:layout_height="180sp">
+
+                <TextView
+                    android:id="@+id/articleId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="@{String.valueOf(article.uuid)}"/>
 
                 <ImageView
                     android:id="@+id/newsImage"
                     style="@style/NewsArticle.Image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/image_size"
+                    android:imageUrl="@{article.urlToImage}"
                     android:contentDescription="News Image" />
 
                 <TextView
@@ -33,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    tools:text="ABC News" />
+                    tools:text="@{article.author}" />
 
             </RelativeLayout>
 
@@ -44,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/newsImageView"
-                tools:text="News Title" />
+                tools:text="@{article.title}" />
 
             <!-- Publish at -->
             <TextView
@@ -55,7 +73,7 @@
                 android:layout_below="@+id/newsTitle"
                 android:layout_marginStart="@dimen/normal_padding"
                 android:layout_marginLeft="@dimen/normal_padding"
-                tools:text="29-05-2020" />
+                tools:text="@{article.publishedAt}" />
 
         </RelativeLayout>
 

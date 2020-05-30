@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 
 import com.doubtnut.news.R
+import com.doubtnut.news.databinding.FragmentDetailsBinding
 import com.doubtnut.news.model.data.Article
 import com.doubtnut.news.util.getProgressDrawable
 import com.doubtnut.news.util.loadImage
@@ -20,13 +22,14 @@ class DetailsFragment : Fragment() {
 
     private var newsUuid = 0
     private lateinit var viewModel : DetailsViewModel
-    private var currentArticle : Article? = null
+    private lateinit var dataBinding : FragmentDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
+        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,14 +48,8 @@ class DetailsFragment : Fragment() {
     fun observeViewModel() {
         viewModel.article.observe(viewLifecycleOwner, Observer { article->
             article?.let {
-                context?.let { newsImage.loadImage(article.urlToImage, getProgressDrawable(it)) }
-                newsAuthor.text = article.source.name
-                newsTitle.text = article.title
-                newsPublishedAt.text = article.publishedAt
-                description.text = article.description
-                content.text = article.content
+                dataBinding.article = article
             }
         })
     }
-
 }

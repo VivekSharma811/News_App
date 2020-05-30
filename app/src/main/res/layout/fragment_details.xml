@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="article"
+            type="com.doubtnut.news.model.data.Article" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +23,7 @@
                 style="@style/NewsArticle.Image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:imageUrl="@{article.urlToImage}"
                 android:contentDescription="News Image" />
 
             <TextView
@@ -25,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                tools:text="ABC News" />
+                tools:text="@{article.author}" />
 
         </RelativeLayout>
 
@@ -36,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/newsImageView"
             android:layout_centerHorizontal="true"
-            tools:text="News Title" />
+            tools:text="@{article.title}" />
 
             <TextView
                 android:id="@+id/newsPublishedAt"
@@ -46,7 +53,7 @@
                 android:layout_below="@+id/newsTitle"
                 android:layout_marginStart="@dimen/normal_padding"
                 android:layout_marginLeft="@dimen/normal_padding"
-                tools:text="29-05-2020" />
+                tools:text="@{article.publishedAt}" />
 
 
         <TextView
@@ -56,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/newsPublishedAt"
             android:layout_marginStart="@dimen/normal_padding"
-            tools:text="Description" />
+            tools:text="@{article.description}" />
 
         <TextView
             android:id="@+id/content"
@@ -64,7 +71,7 @@
             android:layout_height="wrap_content"
             style="@style/NewsArticle.Content"
             android:layout_below="@+id/description"
-            tools:text="Content"
+            tools:text="@{article.content}"
             />
 
     </RelativeLayout>
