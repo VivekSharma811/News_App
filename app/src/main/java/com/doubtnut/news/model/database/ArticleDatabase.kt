@@ -9,7 +9,8 @@ import com.doubtnut.news.model.data.Article
 
 @Database(
     entities = arrayOf(Article::class),
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class ArticleDatabase : RoomDatabase() {
 

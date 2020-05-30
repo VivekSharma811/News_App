@@ -5,22 +5,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.doubtnut.news.R
-import com.doubtnut.news.model.data.NewsResponse
-import com.doubtnut.news.model.network.NewsApiService
+import com.doubtnut.news.model.data.Article
 import com.doubtnut.news.viewmodel.list.ListViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+import com.doubtnut.news.viewmodel.list.ListViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class ListFragment : Fragment() {
+class ListFragment : ScopedFragment(), KodeinAware {
+
+    override val kodein by closestKodein()
+
+    private val viewModelFactory : ListViewModelFactory by instance()
 
     private lateinit var viewModel : ListViewModel
     private val newsListAdapter = NewsListAdapter(arrayListOf())
@@ -35,8 +41,8 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
-        viewModel.refresh()
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(ListViewModel::class.java)
 
         newsList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -47,33 +53,36 @@ class ListFragment : Fragment() {
             newsList.visibility = View.GONE
             loadingError.visibility = View.GONE
             loadingView.visibility = View.VISIBLE
-            //viewModel.refresh()
-            viewModel.fetchFromDatabase()
+            bypassCache()
             refreshLayout.isRefreshing = false
         }
-
-        observeViewModel()
+        getNews()
+        checkForError()
     }
 
-    fun observeViewModel() {
-        viewModel.articles.observe(viewLifecycleOwner, Observer {articles ->
-            articles?.let {
+    private fun checkForError() {
+
+    }
+
+    private fun getNews() = launch {
+        val news = viewModel.news.await()
+        bindUi(news)
+    }
+
+    private fun bypassCache() = launch {
+        val news = viewModel.newsReload.await()
+        bindUi(news)
+    }
+
+    private fun bindUi(news : LiveData<List<Article>>) = launch {
+        news.observe(viewLifecycleOwner, Observer {
+            if(it == null) {
+                return@Observer
+            } else {
+                loadingError.visibility = View.GONE
+                loadingView.visibility = View.GONE
                 newsList.visibility = View.VISIBLE
-                newsListAdapter.updateNewsList(articles)
-            }
-        })
-        viewModel.loadError.observe(viewLifecycleOwner, Observer { isError ->
-            isError?.let {
-                loadingError.visibility = if(it) View.VISIBLE else View.GONE
-            }
-        })
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                loadingView.visibility = if(it) View.VISIBLE else View.GONE
-                if(it) {
-                    loadingError.visibility = View.GONE
-                    newsList.visibility = View.GONE
-                }
+                newsListAdapter.updateNewsList(it)
             }
         })
     }

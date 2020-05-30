@@ -16,9 +16,19 @@ import com.doubtnut.news.model.data.Article
 import com.doubtnut.news.util.getProgressDrawable
 import com.doubtnut.news.util.loadImage
 import com.doubtnut.news.viewmodel.details.DetailsViewModel
+import com.doubtnut.news.viewmodel.details.DetailsViewModelFactory
 import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : ScopedFragment(), KodeinAware {
+
+    override val kodein by closestKodein()
+
+    private val viewModelFactory : DetailsViewModelFactory by instance()
 
     private var newsUuid = 0
     private lateinit var viewModel : DetailsViewModel
@@ -39,17 +49,15 @@ class DetailsFragment : Fragment() {
             newsUuid = DetailsFragmentArgs.fromBundle(it).newsUuid
         }
 
-        viewModel = ViewModelProviders.of(this).get(DetailsViewModel::class.java)
-        viewModel.refresh(newsUuid)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(DetailsViewModel::class.java)
 
-        observeViewModel()
+        bindUi()
     }
 
-    fun observeViewModel() {
-        viewModel.article.observe(viewLifecycleOwner, Observer { article->
-            article?.let {
-                dataBinding.article = article
-            }
+    private fun bindUi() = launch {
+        viewModel.refresh(newsUuid).observe(viewLifecycleOwner, Observer {
+            dataBinding.article = it
         })
     }
 }

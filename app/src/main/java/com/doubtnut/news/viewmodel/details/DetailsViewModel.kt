@@ -1,25 +1,17 @@
 package com.doubtnut.news.viewmodel.details
 
-import android.app.Application
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.doubtnut.news.model.data.Article
-import com.doubtnut.news.model.database.ArticleDatabase
-import com.doubtnut.news.viewmodel.BaseViewModel
-import kotlinx.coroutines.launch
+import com.doubtnut.news.model.repository.NewsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class DetailsViewModel(application: Application) : BaseViewModel(application) {
+class DetailsViewModel(
+    private val newsRepository: NewsRepository
+) : ViewModel() {
 
-    val article = MutableLiveData<Article>()
-
-    fun refresh(articleUuid : Int) {
-        fetchFromDatabase(articleUuid)
+    suspend fun refresh(articleUuid : Int) : LiveData<Article> {
+        return newsRepository.getCurrentArticle(articleUuid)
     }
-
-    private fun fetchFromDatabase(articleUuid: Int) {
-        launch {
-            val articleValue = ArticleDatabase(getApplication()).articleDao().getArticle(articleUuid)
-            article.value = articleValue
-        }
-    }
-
 }

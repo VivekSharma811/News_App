@@ -1,6 +1,7 @@
 package com.doubtnut.news.model.network
 
 import com.doubtnut.news.model.data.NewsResponse
+import com.doubtnut.news.model.network.interceptor.ConnectivityInterceptor
 import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -17,7 +18,9 @@ const val BASE_URL = "https://newsapi.org/v2/"
 interface NewsApiService {
 
     companion object {
-        operator fun invoke() : NewsApiService {
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ) : NewsApiService {
             val requestInterceptor = Interceptor {chain ->
                 val url = chain.request()
                     .url()
@@ -35,6 +38,7 @@ interface NewsApiService {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
                 .build()
 
             return Retrofit.Builder()
