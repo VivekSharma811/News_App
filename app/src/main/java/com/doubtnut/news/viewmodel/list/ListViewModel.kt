@@ -13,4 +13,6 @@ class ListViewModel(
     }
 
     val newsReload by lazyDeferred { newsRepository.getNewsBypassCache() }
+
+    val error by lazyDeferred { newsRepository.checkError() }
 }

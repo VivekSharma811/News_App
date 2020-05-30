@@ -60,8 +60,14 @@ class ListFragment : ScopedFragment(), KodeinAware {
         checkForError()
     }
 
-    private fun checkForError() {
-
+    private fun checkForError()  = launch {
+        viewModel.error.await().observe(viewLifecycleOwner, Observer {
+            if(it) {
+                loadingView.visibility = View.GONE
+                newsList.visibility = View.GONE
+                loadingError.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun getNews() = launch {

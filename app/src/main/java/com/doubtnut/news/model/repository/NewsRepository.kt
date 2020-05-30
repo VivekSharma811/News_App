@@ -10,4 +10,6 @@ interface NewsRepository {
     suspend fun getNewsBypassCache() : LiveData<List<Article>>
 
     suspend fun getCurrentArticle(uuid : Int) : LiveData<Article>
+
+    suspend fun checkError() : LiveData<Boolean>
 }

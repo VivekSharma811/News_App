@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
+
 @Entity(tableName = "article_table")
 data class Article(
     val author: String?,

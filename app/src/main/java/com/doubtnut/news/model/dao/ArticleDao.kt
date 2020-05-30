@@ -10,7 +10,7 @@ import com.doubtnut.news.model.data.Article
 interface ArticleDao {
 
     @Insert
-    suspend fun insertAll(vararg articles : Article)
+    fun insertAll(vararg articles : Article)
 
     @Query("SELECT * FROM article_table")
     fun getAllArticles() : LiveData<List<Article>>
@@ -19,6 +19,6 @@ interface ArticleDao {
     fun getArticle(articleId : Int) : LiveData<Article>
 
     @Query("DELETE FROM article_table")
-    suspend fun deleteAll()
+    fun deleteAll()
 
 }

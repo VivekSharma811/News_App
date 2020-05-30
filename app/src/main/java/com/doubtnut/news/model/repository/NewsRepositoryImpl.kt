@@ -34,6 +34,12 @@ class NewsRepositoryImpl(
         }
     }
 
+    override suspend fun checkError(): LiveData<Boolean> {
+        return withContext(Dispatchers.IO) {
+            return@withContext newsNetworkDataSource.error
+        }
+    }
+
     override suspend fun getNews(): LiveData<List<Article>> {
         return withContext(Dispatchers.IO) {
             initNewsData()
@@ -48,17 +54,17 @@ class NewsRepositoryImpl(
         }
     }
 
-    private suspend fun initNewsData() {
-        if(isFetchNeeded(ZonedDateTime.now().minusHours(1)))
+    private fun initNewsData() {
+        if(isFetchNeeded(ZonedDateTime.now()))
             fetchLatestNews()
     }
 
-    private suspend fun fetchLatestNews() {
+    private fun fetchLatestNews() {
         newsNetworkDataSource.fetchNews("bbc-news")
     }
 
     private fun isFetchNeeded(lastFetchedTime: ZonedDateTime) : Boolean {
-        val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
-        return lastFetchedTime.isBefore(thirtyMinutesAgo)
+        val fiveMinutesAgo = ZonedDateTime.now().minusMinutes(5)
+        return lastFetchedTime.isBefore(fiveMinutesAgo)
     }
 }
